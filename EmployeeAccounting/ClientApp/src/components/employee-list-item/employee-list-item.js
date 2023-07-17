@@ -7,11 +7,11 @@ const EmployeeListItem = (props) => {
     const { name, salary, onDelete, onToggleProp, isPromoted, bonusAdded, onChangeSalaryFromInput} = props;
     let classNames = "list-group-item d-flex justify-content-between"
 
-    if (isPromoted) {
+    if (bonusAdded) {
         classNames += ' increase';
     }
 
-    if (bonusAdded) {
+    if (isPromoted) {
         classNames += ' like';
     }
 

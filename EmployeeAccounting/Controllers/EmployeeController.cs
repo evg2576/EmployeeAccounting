@@ -11,7 +11,7 @@ public class EmployeeController : ControllerBase
     {
         data = new List<Employee>
             {
-                new Employee { Name = "Nekita", Salary = 1337, BonusAdded = true, IsPromoted = false, Id = 1 },
+                new Employee { Name = "Nekita", Salary = 1337, BonusAdded = true, IsPromoted = true, Id = 1 },
                 new Employee { Name = "S3rg10", Salary = 5051, BonusAdded = true, IsPromoted = true, Id = 2 },
             };
     }
