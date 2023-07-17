@@ -11,16 +11,24 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [
-                {name: 'Sergio', salary: 800, increase: false, like: true, id: 1},
-                {name: 'Steve', salary: 1300, increase: true, like: false, id: 2},
-                {name: 'Morgan', salary: 1600, increase: false, like: true, id: 3}
-            ],
+            data: [ ],
             term: '',
-            filter: 'all'
+            filter: 'all',
+            loading: true
         }
         this.maxId = 4;
     }
+
+    componentDidMount() {
+        this.getEmployee();
+    }
+
+    async getEmployee() {
+        const response = await fetch('api/Employee');
+        const data = await response.json();
+        this.setState({ data: data, loading: false })
+    }
+
 
     deleteItem = (id) => {
         this.setState(({data}) => {
