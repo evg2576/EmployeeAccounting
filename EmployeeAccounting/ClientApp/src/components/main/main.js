@@ -5,9 +5,9 @@ import AppFilter from '../app-filter/app-filter';
 import EmployeeList from '../employee-list/employee-list';
 import EmployeeAddForm from '../employee-add-form/employee-add-form';
 
-import './app.css';
+import './main.css';
 
-class App extends Component {
+class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -127,7 +127,7 @@ class App extends Component {
         const visibleData = this.filterPost(this.searchEmp(data, term), filter);
 
         return (
-            <div className="app">
+            <div className="main">
                 <AppInfo 
                     employees={employees}
                     increased={increased}/>
@@ -149,4 +149,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default Main;
