@@ -19,7 +19,7 @@ const EmployeeListItem = (props) => {
         <li className={classNames}>
             <span className="list-group-item-label"
                 onClick={onToggleProp}
-                data-toggle='like'>
+                data-toggle='isPromoted'>
                 {name}
             </span>
             <input type="text" 
@@ -31,7 +31,7 @@ const EmployeeListItem = (props) => {
                 <button type="button"
                     className="btn-cookie btn-sm "
                     onClick={onToggleProp}
-                    data-toggle='increase'>
+                    data-toggle='bonusAdded'>
                     <i className="fas fa-cookie"></i>
                 </button>
 

@@ -11,7 +11,7 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [ ],
+            data: [],
             term: '',
             filter: 'all',
             loading: true
@@ -102,7 +102,7 @@ class Main extends Component {
     filterPost = (items, filter) => {
         switch(filter) {
             case 'like':
-                return items.filter(item => item.like);
+                return items.filter(item => item.isPromoted);
             case 'more1000':
                 return items.filter(item => item.salary > 1000);
             default: 
@@ -131,7 +131,7 @@ class Main extends Component {
     render() {
         const {data, term, filter} = this.state;
         const employees = this.state.data.length;
-        const increased = this.state.data.filter(item => item.increase).length;
+        const increased = this.state.data.filter(item => item.isPromoted).length;
         const visibleData = this.filterPost(this.searchEmp(data, term), filter);
 
         return (
