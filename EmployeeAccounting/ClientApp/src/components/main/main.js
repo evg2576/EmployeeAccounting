@@ -16,7 +16,7 @@ class Main extends Component {
             filter: 'all',
             loading: true
         }
-        this.maxId = 4;
+        this.maxId = 3;
     }
 
     componentDidMount() {
@@ -29,33 +29,65 @@ class Main extends Component {
         this.setState({ data: data, loading: false })
     }
 
+    async addEmployee(data) {
+        try {
+            const response = await fetch('api/Employee', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            console.log(JSON.stringify(data));
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
-    deleteItem = (id) => {
-        this.setState(({data}) => {
+    async deleteEmployee(id) {
+        const response = await fetch('api/Employee/' + id, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                console.log('Delete success');
+            } else {
+                console.error('Error');
+            }
+        })
+
+        this.setState(({ data }) => {
             return {
                 data: data.filter(item => item.id !== id)
             }
         })
     }
 
-    addItem = (name, salary) => {
-            const newItem = {
-                name, 
-                salary,
-                increase: false,
-                rise: false,
-                id: this.maxId++
-            }
-            this.setState(({data}) => {
-                const newArr = [...data, newItem];
-                return {
-                    data: newArr
-                }
-            });
+    deleteItem = (id) => {
+        this.deleteEmployee(id);
     }
 
-    onToggleProp = (id, prop) => {
+    addItem = (name, salary) => {
+        const newItem = {
+            name, 
+            salary,
+            bonusAdded: false,
+            isPromoted: false,
+            id: this.maxId++
+        }
 
+        this.addEmployee(newItem);
+
+        this.setState(({data}) => {
+            const newArr = [...data, newItem];
+            return {
+                data: newArr
+            }
+        });
+    }
+
+
+    onToggleProp = (id, prop) => {
         this.setState(({data}) => ({
             data: data.map(item => {
                 if (item.id === id) {
@@ -65,25 +97,6 @@ class Main extends Component {
             })
         }))
     }
-
-    // onToggleLike = (id) => {
-    //     this.setState(({data}) => ({
-    //         data: data.map(item => {
-    //             if (item.id === id) {
-    //                 return {...item, like: !item.like}
-    //             }
-    //             return item;
-    //         })
-    //     }))
-    // }
-
-    // filterLike = () => {
-    //     this.setState(({data}) => {
-    //         return {
-    //             data: data.filter(item => item.like)
-    //         }
-    //     });
-    // }
 
     searchEmp = (items, term) => {
         if (term.length === 0) {

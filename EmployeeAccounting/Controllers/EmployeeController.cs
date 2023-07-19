@@ -26,10 +26,10 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
 
-    [HttpDelete("{name}")]
-    public IActionResult Delete(string name)
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
     {
-        var employee = data.FirstOrDefault(x => x.Name == name);
+        var employee = data.FirstOrDefault(x => x.Id == id);
 
         if (employee == null)
             return NotFound();
