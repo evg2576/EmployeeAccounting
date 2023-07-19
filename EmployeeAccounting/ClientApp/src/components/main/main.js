@@ -20,44 +20,18 @@ class Main extends Component {
     }
 
     componentDidMount() {
-        this.getEmployee();
+        this.getEmployees();
     }
 
-    async getEmployee() {
+    async getEmployees() {
         const response = await fetch('api/Employee');
         const data = await response.json();
         this.setState({ data: data, loading: false })
     }
 
-    async addEmployee() {
-
-        const dat = { username: 'john', password: 'secret' };
-
-        try {
-            const response = await fetch('api/Employee', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dat)
-            });
-
-            const result = await response.json();
-            console.log(result);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    async deleteEmployee(id) {
-        const response = await fetch('api/Employee/' + id, {
+    deleteItem = async (id) => {
+        await fetch('api/Employee/' + id, {
             method: 'DELETE'
-        }).then(response => {
-            if (response.ok) {
-                console.log('Delete success');
-            } else {
-                console.error('Error');
-            }
         })
 
         this.setState(({ data }) => {
@@ -65,10 +39,6 @@ class Main extends Component {
                 data: data.filter(item => item.id !== id)
             }
         })
-    }
-
-    deleteItem = (id) => {
-        this.deleteEmployee(id);
     }
 
     addItem = async (name, salary) => {
