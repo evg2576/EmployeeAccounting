@@ -26,7 +26,7 @@ class Main extends Component {
     async getEmployees() {
         const response = await fetch('api/Employee');
         const data = await response.json();
-        this.setState({ data: data, loading: false })
+        this.setState({ data: data, loading: false, maxId: data.length})
     }
 
     deleteItem = async (id) => {
@@ -47,7 +47,7 @@ class Main extends Component {
             salary: parseInt(salary),
             bonusAdded: false,
             isPromoted: false,
-            id: this.maxId++
+            id: ++this.maxId
         }
 
         const formData = new FormData();
