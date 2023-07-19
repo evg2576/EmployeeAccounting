@@ -29,17 +29,21 @@ class Main extends Component {
         this.setState({ data: data, loading: false })
     }
 
-    async addEmployee(data) {
+    async addEmployee() {
+
+        const dat = { username: 'john', password: 'secret' };
+
         try {
             const response = await fetch('api/Employee', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(dat)
             });
+
             const result = await response.json();
-            console.log(JSON.stringify(data));
+            console.log(result);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -67,16 +71,32 @@ class Main extends Component {
         this.deleteEmployee(id);
     }
 
-    addItem = (name, salary) => {
+    addItem = async (name, salary) => {
         const newItem = {
             name, 
-            salary,
+            salary: parseInt(salary),
             bonusAdded: false,
             isPromoted: false,
             id: this.maxId++
         }
 
-        this.addEmployee(newItem);
+        const formData = new FormData();
+
+        for (let key in newItem) {
+            formData.append(key, newItem[key]);
+        }
+
+        try {
+            const response = await fetch('api/Employee', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error('Error:', error);
+        }
 
         this.setState(({data}) => {
             const newArr = [...data, newItem];
@@ -84,6 +104,8 @@ class Main extends Component {
                 data: newArr
             }
         });
+
+
     }
 
 
