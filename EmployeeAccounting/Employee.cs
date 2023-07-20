@@ -1,6 +1,9 @@
-﻿namespace EmployeeAccounting;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EmployeeAccounting;
 public class Employee
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
     public string Name { get; set; }
     public decimal Salary { get; set; }
