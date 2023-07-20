@@ -20,12 +20,13 @@ public class EmployeeController : ControllerBase
     [Route("create")]
     public IActionResult Create(Employee employee)
     {
-        db.Add(employee);
+        db.Employees.Add(employee);
+        db.SaveChanges();
         return Ok(employee);
     }
 
     [HttpDelete]
-    [Route("delete/{id}")]
+    [Route("delete/{id:int}")]
     public IActionResult Delete(int id)
     {
         var employee = db.Employees.FirstOrDefault(x => x.Id == id);
@@ -34,6 +35,7 @@ public class EmployeeController : ControllerBase
             return NotFound();
 
         db.Employees.Remove(employee);
+        db.SaveChanges();
 
         return Ok(employee);
     }
