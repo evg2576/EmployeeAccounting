@@ -26,8 +26,22 @@ class Main extends Component {
     async getEmployees() {
         const response = await fetch('api/Employee/getall');
         const data = await response.json();
-        this.setState({ data: data, loading: false, maxId: data.length})
+        this.setState({ data: data, loading: false, maxId: data.length });
     }
+
+    async updateEmployee(employee) {
+        const formData = new FormData();
+
+        for (let key in employee) {
+            formData.append(key, employee[key]);
+        }
+
+        await fetch('api/Employee/update', {
+            method: 'POST',
+            body: formData
+        });
+    }
+
 
     deleteItem = async (id) => {
         await fetch('api/Employee/delete/' + id, {
@@ -50,13 +64,13 @@ class Main extends Component {
             id: 0
         }
 
-        const formData = new FormData();
-
-        for (let key in newItem) {
-            formData.append(key, newItem[key]);
-        }
-
         try {
+            const formData = new FormData();
+
+            for (let key in newItem) {
+                formData.append(key, newItem[key]);
+            }
+
             await fetch('api/Employee/create', {
                 method: 'POST',
                 body: formData
@@ -78,15 +92,16 @@ class Main extends Component {
 
 
     onToggleProp = (id, prop) => {
-        this.setState(({data}) => ({
-            data: data.map(item => {
-                if (item.id === id) {
-                    return {...item, [prop]: !item[prop]}
-                }
-                return item;
-            })
-        }))
-    }
+        const updatedData = this.state.data.map(item => {
+            if (item.id === id) {
+                return { ...item, [prop]: !item[prop] };
+            }
+            return item;
+        });
+        this.setState({ data: updatedData }, () => {
+            this.updateEmployee(updatedData.find(item => item.id === id));
+        });
+    };
 
     searchEmp = (items, term) => {
         if (term.length === 0) {
@@ -118,14 +133,15 @@ class Main extends Component {
     }
 
     onChangeSalaryFromInput = (id, salary) => {
-        this.setState(({data}) => ({
-            data: data.map(item => {
-                if (item.id === id) {
-                    return {...item, salary: salary}
-                }
-                return item;
-            })
-        }))
+        const updatedData = this.state.data.map(item => {
+            if (item.id === id) {
+                return { ...item, salary };
+            }
+            return item;
+        });
+        this.setState({ data: updatedData }, () => {
+            this.updateEmployee(updatedData.find(item => item.id === id));
+        });
     }
 
 
