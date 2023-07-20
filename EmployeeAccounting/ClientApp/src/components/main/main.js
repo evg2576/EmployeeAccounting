@@ -14,7 +14,7 @@ class Main extends Component {
             data: [],
             term: '',
             filter: 'all',
-            loading: true
+            loading: true,
         }
         this.maxId = 3;
     }
@@ -57,13 +57,10 @@ class Main extends Component {
         }
 
         try {
-            const response = await fetch('api/Employee/create', {
+            await fetch('api/Employee/create', {
                 method: 'POST',
                 body: formData
             });
-
-            const result = await response.json();
-            console.log(result);
         } catch (error) {
             console.error('Error:', error);
         }
