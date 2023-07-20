@@ -24,13 +24,13 @@ class Main extends Component {
     }
 
     async getEmployees() {
-        const response = await fetch('api/Employee');
+        const response = await fetch('api/Employee/getall');
         const data = await response.json();
         this.setState({ data: data, loading: false, maxId: data.length})
     }
 
     deleteItem = async (id) => {
-        await fetch('api/Employee/' + id, {
+        await fetch('api/Employee/delete' + id, {
             method: 'DELETE'
         })
 
@@ -57,7 +57,7 @@ class Main extends Component {
         }
 
         try {
-            const response = await fetch('api/Employee', {
+            const response = await fetch('api/Employee/create', {
                 method: 'POST',
                 body: formData
             });

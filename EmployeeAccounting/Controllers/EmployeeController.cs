@@ -11,18 +11,21 @@ public class EmployeeController : ControllerBase
         db = context;
     }
 
-    [HttpGet("~/getall")]
+    [HttpGet]
+    [Route("getall")]
     public IEnumerable<Employee> GetAll() => db.Employees;
 
 
-    [HttpPost("~/create")]
+    [HttpPost]
+    [Route("create")]
     public IActionResult Create(Employee employee)
     {
         db.Add(employee);
         return Ok(employee);
     }
 
-    [HttpDelete("~/delte/{id:int}")]
+    [HttpDelete]
+    [Route("delete/{id}")]
     public IActionResult Delete(int id)
     {
         var employee = db.Employees.FirstOrDefault(x => x.Id == id);
@@ -35,7 +38,8 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
 
-    [HttpPost("~/update/{employee:Employee}")]
+    [HttpPost]
+    [Route("update")]
     public IActionResult Update(Employee employee)
     {
         db.Entry(db.Employees.FirstOrDefault(x => x.Id == employee.Id)).CurrentValues.SetValues(employee);
