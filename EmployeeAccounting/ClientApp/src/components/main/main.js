@@ -14,7 +14,7 @@ class Main extends Component {
             data: [],
             term: '',
             filter: 'all',
-            loading: true,
+            loading: true
         }
         this.maxId = 3;
     }
@@ -30,7 +30,7 @@ class Main extends Component {
     }
 
     deleteItem = async (id) => {
-        await fetch('api/Employee/delete' + id, {
+        await fetch('api/Employee/delete/' + id, {
             method: 'DELETE'
         })
 
