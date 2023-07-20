@@ -44,10 +44,10 @@ class Main extends Component {
     addItem = async (name, salary) => {
         const newItem = {
             name, 
-            salary: parseInt(salary),
+            salary,
             bonusAdded: false,
             isPromoted: false,
-            id: ++this.maxId
+            id: 0
         }
 
         const formData = new FormData();
@@ -61,16 +61,17 @@ class Main extends Component {
                 method: 'POST',
                 body: formData
             });
+            this.getEmployees();
         } catch (error) {
             console.error('Error:', error);
         }
 
-        this.setState(({data}) => {
+/*        this.setState(({data}) => {
             const newArr = [...data, newItem];
             return {
                 data: newArr
             }
-        });
+        });*/
 
 
     }
