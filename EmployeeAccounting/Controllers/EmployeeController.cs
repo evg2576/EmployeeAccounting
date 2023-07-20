@@ -5,37 +5,41 @@ namespace EmployeeAccounting.Controllers;
 [Route("api/[controller]")]
 public class EmployeeController : ControllerBase
 {
-    static readonly List<Employee> data;
-
-    static EmployeeController()
+    AppDbContext db;
+    public EmployeeController(AppDbContext context)
     {
-        data = new List<Employee>
-            {
-                new Employee { Name = "Nekita", Salary = 1337, BonusAdded = true, IsPromoted = true, Id = 1 },
-                new Employee { Name = "S3rg10", Salary = 5051, BonusAdded = true, IsPromoted = true, Id = 2 },
-            };
+        db = context;
     }
 
     [HttpGet]
-    public IEnumerable<Employee> Get() => data;
+    public IEnumerable<Employee> GetAll() => db.Employees;
 
     [HttpPost]
-    public IActionResult Post(Employee employee)
+    public IActionResult Create(Employee employee)
     {
-        data.Add(employee);
+        db.Add(employee);
         return Ok(employee);
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var employee = data.FirstOrDefault(x => x.Id == id);
+        var employee = db.Employees.FirstOrDefault(x => x.Id == id);
 
         if (employee == null)
             return NotFound();
 
-        data.Remove(employee);
+        db.Employees.Remove(employee);
 
+        return Ok(employee);
+    }
+
+    [HttpPost]
+    public IActionResult Update(Employee employee)
+    {
+        db.Entry(db.Employees.FirstOrDefault(x => x.Id == employee.Id)).CurrentValues.SetValues(employee);
+        db.SaveChanges();
+        
         return Ok(employee);
     }
 }
