@@ -6,7 +6,7 @@
         return await employee.json();
     }
 
-    addItem = async (requestData) => {
+    addEmployee = async (requestData) => {
         await fetch(this._apiBase + 'create', {
             method: 'POST',
             body: requestData
@@ -20,7 +20,7 @@
         });
     }
 
-    deleteItem = async (id) => {
+    deleteEmployee = async (id) => {
         await fetch(this._apiBase + 'delete/' + id, {
             method: 'DELETE'
         })

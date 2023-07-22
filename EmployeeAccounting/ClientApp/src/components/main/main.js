@@ -43,37 +43,25 @@ class Main extends Component {
             this.employeeService.getEmployees(pageNumber, this.state.data.pageSize).then(this.onEmployeesLoaded);
         })
     }
+/*    const formData = new FormData();
 
-    async getEmployees() {
-        const response = await fetch('api/Employee/getall/1/10');
-        const data = await response.json();
-        this.setState({ data: data.items, loading: false, maxId: data.length, pageNumber: data.pageNumber });
-    }
-
-    async updateEmployee(employee) {
-        const formData = new FormData();
-
-        for (let key in employee) {
-            formData.append(key, employee[key]);
-        }
-
-        await fetch('api/Employee/update', {
-            method: 'POST',
-            body: formData
-        });
-    }
+    for(let key in employee) {
+        formData.append(key, employee[key]);
+    }*/
 
 
-    deleteItem = async (id) => {
-        await fetch('api/Employee/delete/' + id, {
-            method: 'DELETE'
-        })
 
+
+    deleteEmployee = (id) => {
         this.setState(({ data }) => {
             return {
-                data: { items: data.items.filter(item => item.id !== id) }
+                data: {
+                    items: data.items.filter(item => item.id !== id)
+                }
             }
         })
+        this.employeeService.deleteEmployee(id);
+        this.employeeService.getEmployees(this.state.data.pageNumber, this.state.data.pageSize).then(this.onEmployeesLoaded);
     }
 
     addItem = async (name, salary) => {
@@ -183,7 +171,7 @@ class Main extends Component {
     
                 <EmployeeList 
                     data={visibleData}
-                    onDelete={this.deleteItem}
+                    onDelete={this.deleteEmployee}
                     onToggleProp={this.onToggleProp}
                     onChangeSalaryFromInput={this.onChangeSalaryFromInput} />
                 <Pagination
