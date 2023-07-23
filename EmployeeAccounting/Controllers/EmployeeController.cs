@@ -13,7 +13,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet]
-    [Route("getbysearch/{pageNumber:int}/{pageSize:int}")]
+    [Route("getbysearch")]
     [SwaggerOperation(
     Summary = "Получить список сотрудников в постраничном виде",
     Description = "Получить список сотрудников в постраничном виде")]
