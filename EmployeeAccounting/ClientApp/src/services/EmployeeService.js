@@ -1,22 +1,36 @@
 ﻿class EmployeeService {
     _apiBase = 'api/Employee/';
 
-    getEmployees = async (page, size) => {
-        const employee = await fetch(this._apiBase + 'getall/' + page + '/' + size);
+    getEmployees = async (page, size, search, filterPromoted) => {
+        if (!search) search = '';
+        if (!filterPromoted) filterPromoted = false;
+        const employee = await fetch(this._apiBase + `getbysearch?pageNumber=${page}&pageSize=${size}&name=${search}&isPromoted=${filterPromoted}`);
         return await employee.json();
     }
 
     addEmployee = async (requestData) => {
-        await fetch(this._apiBase + 'create', {
+        const formData = new FormData();
+
+        for (let key in requestData) {
+            formData.append(key, requestData[key]);
+        }
+
+        await fetch(this._apiBase + 'create', { 
             method: 'POST',
-            body: requestData
+            body: formData
         });
     }
 
     updateEmployee = async (requestData) => {
+        const formData = new FormData();
+
+        for (let key in requestData) {
+            formData.append(key, requestData[key]);
+        }
+
         await fetch(this._apiBase + 'update', {
             method: 'POST',
-            body: requestData
+            body: formData
         });
     }
 

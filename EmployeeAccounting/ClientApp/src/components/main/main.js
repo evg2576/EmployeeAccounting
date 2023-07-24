@@ -17,7 +17,6 @@ class Main extends Component {
                 items: []
             },
             term: '',
-            filter: 'all',
             loading: true,
 
         };
@@ -32,7 +31,8 @@ class Main extends Component {
 
     onEmployeesLoaded = (data) => {
         this.setState({
-            data
+            data,
+            loading: false
         })
     }
 
@@ -61,7 +61,7 @@ class Main extends Component {
             }
         })
         this.employeeService.deleteEmployee(id);
-        this.employeeService.getEmployees(this.state.data.pageNumber, this.state.data.pageSize).then(this.onEmployeesLoaded);
+        this.employeeService.getEmployees(this.state.data.pageNumber, this.state.data.pageSize, this.state.term).then(this.onEmployeesLoaded);
     }
 
     addItem = async (name, salary) => {
@@ -72,22 +72,8 @@ class Main extends Component {
             isPromoted: false,
             id: 0
         }
-
-        try {
-            const formData = new FormData();
-
-            for (let key in newItem) {
-                formData.append(key, newItem[key]);
-            }
-
-            await fetch('api/Employee/create', {
-                method: 'POST',
-                body: formData
-            });
-            this.getEmployees();
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        this.employeeService.addEmployee(newItem).then(this.onEmployeesLoaded);
+        this.employeeService.getEmployees(this.state.data.pageNumber, this.state.data.pageSize, this.state.term).then(this.onEmployeesLoaded);
     }
 
 
@@ -99,11 +85,11 @@ class Main extends Component {
             return item;
         });
         this.setState({ data: { items: updatedData } }, () => {
-            this.updateEmployee(updatedData.find(item => item.id === id));
+            this.employeeService.updateEmployee(updatedData.find(item => item.id === id));
         });
     };
 
-    searchEmp = (items, term) => {
+/*    searchEmp = (items, term) => {
         if (term.length === 0) {
             return items;
         }
@@ -111,13 +97,15 @@ class Main extends Component {
         return items.filter(item => {
             return item.name.indexOf(term) > -1
         })
-    }
+    }*/
 
     onUpdateSearch = (term) => {
-        return this.setState({term});
+        this.setState({ term }, () => {
+            this.employeeService.getEmployees(this.state.data.pageNumber, this.state.data.pageSize, term).then(this.onEmployeesLoaded);
+        });
     }
 
-    filterPost = (items, filter) => {
+/*    filterPost = (items, filter) => {
         switch(filter) {
             case 'like':
                 return items.filter(item => item.isPromoted);
@@ -130,7 +118,7 @@ class Main extends Component {
 
     onFilterSelect = (filter) => {
         this.setState({filter});
-    }
+    }*/
 
     onChangeSalaryFromInput = (id, salary) => {
         const updatedData = this.state.data.items.map(item => {
@@ -148,15 +136,17 @@ class Main extends Component {
 
 
     render() {
-        if (!this.state.data.items.length) {
+
+        const { data, term, filter, pageNumber, loading } = this.state;
+        const countPages = Math.ceil(this.state.data.totalItems / this.state.data.pageSize);
+        const employees = this.state.data.totalItems;
+        const increased = this.state.data.promotedCount;
+/*        const visibleData = this.filterPost(this.searchEmp(data.items, term), filter);
+*/
+
+        if (loading) {
             return <div>Loading...</div>;
         }
-
-        const { data, term, filter, pageNumber } = this.state;
-        const countPages = Math.ceil(this.state.data.totalItems / this.state.data.pageSize);
-        const employees = this.state.data.length;
-        const increased = this.state.data.items.filter(item => item.isPromoted).length;
-        const visibleData = this.filterPost(this.searchEmp(data.items, term), filter);
 
         return (
             <div className="main">
@@ -170,7 +160,7 @@ class Main extends Component {
                 </div>
     
                 <EmployeeList 
-                    data={visibleData}
+                    data={data.items}
                     onDelete={this.deleteEmployee}
                     onToggleProp={this.onToggleProp}
                     onChangeSalaryFromInput={this.onChangeSalaryFromInput} />
