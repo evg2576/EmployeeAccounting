@@ -13,27 +13,34 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet]
-    [Route("getall/{pageNumber:int}/{pageSize:int}")]
+    [Route("getbysearch")]
     [SwaggerOperation(
-    Summary = "Получить список всех сотрудников в постраничном виде",
-    Description = "Получить список всех сотрудников в постраничном виде")]
-    public IActionResult GetAll(int pageNumber = 1, int pageSize = 10)
+    Summary = "Получить список сотрудников в постраничном виде",
+    Description = "Получить список сотрудников в постраничном виде")]
+    public IActionResult GetBySearch(int pageNumber = 1, int pageSize = 10, 
+        string? name = null, bool isPromoted = false)
     {
         int itemsToSkip = (pageNumber - 1) * pageSize;
 
-        var items = db.Employees.Skip(itemsToSkip).Take(pageSize);
+        var query = db.Employees.AsQueryable();
+
+        if (!string.IsNullOrEmpty(name))
+            query = query.Where(m => m.Name.Contains(name));
+
+        if (isPromoted)
+            query = query.Where(m => m.IsPromoted == isPromoted);
 
         var response = new PaginatedResponse<Employee>
         {
             TotalItems = db.Employees.Count(),
+            PromotedCount = db.Employees.Count(x => x.IsPromoted),
             PageNumber = pageNumber,
             PageSize = pageSize,
-            Items = items
+            Items = query.Skip(itemsToSkip).Take(pageSize)
         };
 
         return Ok(response);
     }
-
 
     [HttpPost]
     [Route("create")]
