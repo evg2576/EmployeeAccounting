@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace EmployeeAccounting.Controllers;
@@ -13,6 +14,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [Route("getbysearch")]
     [SwaggerOperation(
     Summary = "Получить список сотрудников в постраничном виде",
