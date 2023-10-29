@@ -15,7 +15,7 @@
             formData.append(key, requestData[key]);
         }
 
-        await fetch(this._apiBase + 'create', { 
+        await fetch(this._apiBase + 'create', {
             method: 'POST',
             body: formData
         });
